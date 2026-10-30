@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Add New User - Animated Blue Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0077ff;
+      --secondary: #0043a8;
+      --success: #00b4d8;
+      --danger: #ff477e;
+      --warning: #ffb703;
+      --info: #48cae4;
+      --light: #f0f8ff;
+      --dark: #03045e;
+      --gray: #6c757d;
+      --white: #ffffff;
+      --blue-bg: #f4f8ff;
+      --blue-shadow: rgba(0, 119, 255, 0.2);
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #f0f4ff, #e2ecff, #f8fbff, #eef4ff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: var(--dark);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+
+    /* Mobile First Header */
+    .header {
+      background-color: var(--white);
+      box-shadow: 0 2px 15px var(--blue-shadow);
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--secondary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: var(--light);
+      color: var(--primary);
+      padding: 0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* Mobile Responsive Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 60px;
+      left: -260px;
+      bottom: 0;
+      width: 260px;
+      background-color: var(--white);
+      box-shadow: 4px 0 20px var(--blue-shadow);
+      transition: transform 0.3s ease-in-out;
+      z-index: 900;
+      overflow-y: auto;
+    }
+
+    .sidebar.active {
+      transform: translateX(260px);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 15px 0;
+    }
+
+    .sidebar-item {
+      margin-bottom: 5px;
+      padding: 0 10px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: var(--gray);
+      text-decoration: none;
+      border-radius: 8px;
+      gap: 12px;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .sidebar-link:hover, .sidebar-link.active {
+      background: rgba(0, 119, 255, 0.1);
+      color: var(--primary);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 65px;
+      margin-left: 0;
+      padding: 15px 8px;
+      transition: all 0.3s ease;
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--blue-shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #d0e1fd;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 0.85rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #bde0fe;
+      border-radius: 8px;
+      font-size: 14px;
+      background-color: #f8fbff;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--white);
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-check-input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .form-check-label {
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+    }
+
+    .form-result {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .form-result.success {
+      background-color: rgba(0, 180, 216, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(0, 180, 216, 0.3);
+    }
+
+    .form-result.error {
+      background-color: rgba(255, 71, 126, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(255, 71, 126, 0.3);
+    }
+
+    .maintenance-warning {
+      background: linear-gradient(135deg, #ffb703, #fb8500);
+      color: var(--dark);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* Desktop View adjustments */
+    @media (min-width: 768px) {
+      .sidebar {
+        left: 0;
+      }
+      .sidebar.active {
+        transform: translateX(-260px);
+      }
+      .main-content {
+        margin-left: 260px;
+        padding: 25px;
+      }
+      .main-content.full-width {
+        margin-left: 0;
+      }
+    }
+  
+/* NONNOI DARK BLUE / BLACK THEME */
+:root{
+  --primary:#168bff !important; --secondary:#0756b5 !important;
+  --success:#16c7e8 !important; --info:#38bdf8 !important;
+  --light:#101b2d !important; --dark:#e8f1ff !important;
+  --white:#0b1422 !important; --blue-bg:#080f1b !important;
+  --blue-shadow:rgba(0,132,255,.20) !important;
+}
+html,body{background:#070d17 !important;color:#e7efff !important;}
+body{background:radial-gradient(ellipse at 15% 0%,#10294a 0%,#080f1b 42%,#050910 100%) !important;}
+.header,.navbar,.topbar{background:rgba(8,17,31,.94) !important;color:#eaf3ff !important;border-bottom:1px solid #183657 !important;box-shadow:0 8px 28px rgba(0,0,0,.35) !important;backdrop-filter:blur(14px);}
+.header-title,.header h1,.header h2,h1,h2,h3,h4,label{color:#eaf3ff !important;}
+.card,.login-card,.stat-card,.dashboard-card,.custom-modal,.modal-content,.sidebar,.content-card,.panel,.table-container,.form-container{background:linear-gradient(145deg,#101d30,#0a1422) !important;color:#e5efff !important;border:1px solid #1b3858 !important;box-shadow:0 12px 34px rgba(0,0,0,.32),0 0 18px rgba(0,119,255,.06) !important;}
+input,select,textarea,.form-control{background:#081321 !important;color:#edf5ff !important;border:1px solid #244466 !important;}
+input::placeholder,textarea::placeholder{color:#8298b5 !important;}
+input:focus,select:focus,textarea:focus,.form-control:focus{border-color:#168bff !important;box-shadow:0 0 0 3px rgba(22,139,255,.16) !important;}
+button,.btn,.btn-primary,.btn-login{background:linear-gradient(135deg,#0878e8,#064ca8) !important;color:#fff !important;border:1px solid #258fff !important;box-shadow:0 5px 16px rgba(0,105,220,.22) !important;}
+.btn-success{background:linear-gradient(135deg,#087f9e,#075a80) !important;border-color:#18b8d9 !important;}
+.btn-danger,.btn-confirm-delete{background:linear-gradient(135deg,#b52b48,#781d35) !important;border-color:#d64c68 !important;}
+.btn-warning{background:linear-gradient(135deg,#9a6814,#6d470b) !important;border-color:#d69b2c !important;}
+a{color:#55b5ff !important;}
+table{color:#e5efff !important;border-color:#1d3855 !important;}
+th{background:#102743 !important;color:#8bcaff !important;}
+td{border-color:#1b3049 !important;}
+tr:nth-child(even){background:rgba(22,139,255,.045) !important;}
+tr:hover{background:rgba(22,139,255,.10) !important;}
+hr,.divider{border-color:#1b3858 !important;}
+.badge,.status,.creator-badge{border:1px solid #28517b !important;}
+.custom-modal-overlay{background:rgba(0,0,0,.72) !important;}
+.login-card .logo-icon{color:#38a5ff !important;text-shadow:0 0 24px rgba(22,139,255,.55);}
+::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-track{background:#080f1b}::-webkit-scrollbar-thumb{background:#145a99;border-radius:8px}
+
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-left">
+        <button class="btn btn-icon" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="header-title">
+          <i class="fas fa-user-plus"></i>
+          <span>Add New User</span>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <div class="user-avatar">
+          <img src="/logo.png" alt="Admin" width="35" height="35" style="border: 2px solid var(--primary); border-radius: 50%;">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+      <li class="sidebar-item">
+        <a href="index.html" class="sidebar-link">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="admin.html" class="sidebar-link active">
+          <i class="fas fa-user-plus"></i>
+          <span>Add User</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link">
+          <i class="fas fa-users-cog"></i>
+          <span>Manage Users</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="reseller.html" class="sidebar-link">
+          <i class="fas fa-user-shield"></i>
+          <span>Add Reseller</span>
+        </a>
+      </li>
+      <!-- Manage Resellers Link Added Here -->
+      <li class="sidebar-item">
+        <a href="manage-resellers.html" class="sidebar-link">
+          <i class="fas fa-users-gear"></i>
+          <span>Manage Resellers</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="settings.html" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+    <div class="container">
+      <div id="maintenanceWarning" class="maintenance-warning" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i> Site is currently in Maintenance Mode.
+      </div>
+      <div class="card">
+        <form id="addUserForm">
+          <div class="form-group">
+            <label for="username" class="label">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="Enter username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="label">Password</label>
+            <div class="password-container">
+              <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+              <button type="button" class="toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="validity" class="label">Valid Until</label>
+            <input type="datetime-local" id="validity" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="label">Status</label>
+            <div class="form-check">
+              <input type="checkbox" id="statusCheckbox" class="form-check-input">
+              <label for="statusCheckbox" class="form-check-label">Active User</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="label">Device Access</label>
+            <div class="radio-group">
+              <div class="form-check">
+                <input type="radio" id="device1" name="access" value="1" class="form-check-input" checked>
+                <label for="device1" class="form-check-label">1 Device</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" id="deviceUnlimited" name="access" value="∞" class="form-check-input">
+                <label for="deviceUnlimited" class="form-check-label">Unlimited</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="credit" class="label">Seller's Credit</label>
+            <select id="credit" class="form-control" required>
+              <option value="10">10 Credits</option>
+              <option value="20">20 Credits</option>
+              <option value="30">30 Credits</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-user-plus"></i> Add User
+          </button>
+          
+          <div id="result" class="form-result"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      if(window.innerWidth >= 768) {
+        mainContent.classList.toggle('full-width');
+      }
+    });
+
+    const togglePasswordBtn = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
+
+    togglePasswordBtn.addEventListener('click', () => {
+      const icon = togglePasswordBtn.querySelector('i');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    const addUserForm = document.getElementById('addUserForm');
+    const resultEl = document.getElementById('result');
+
+    addUserForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const validity = document.getElementById('validity').value;
+      const isActive = document.getElementById('statusCheckbox').checked;
+      const credit = document.getElementById('credit').value;
+      const access = document.querySelector('input[name="access"]:checked').value;
+      const status = isActive ? 'active' : 'inactive';
+      
+      if (!username || !password || !validity) {
+        showResult('Please fill all fields', 'error');
+        return;
+      }
+
+      const date = new Date(validity);
+      const pad = n => n.toString().padStart(2, '0');
+      const formattedDate = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+      
+      const now = new Date();
+      const rgtime = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+      const userRef = ref(db, `userinfo/${username}`);
+      set(userRef, {
+        username: username,
+        password: password,
+        status: status,
+        validity: formattedDate,
+        access: access,
+        device: 'null',
+        rgtime: rgtime,
+        credit: credit
+      }).then(() => {
+        showResult('User added successfully!', 'success');
+        addUserForm.reset();
+      }).catch((error) => {
+        showResult('Error: ' + error.message, 'error');
+      });
+    });
+
+    function showResult(message, type) {
+      resultEl.textContent = message;
+      resultEl.className = `form-result ${type}`;
+      setTimeout(() => {
+        resultEl.textContent = '';
+        resultEl.className = 'form-result';
+      }, 3000);
+    }
+
+    const maintenanceWarning = document.getElementById('maintenanceWarning');
+    const settingsRef = ref(db, 'settings/maintenanceMode');
+    onValue(settingsRef, (snapshot) => {
+      const inMaintenance = snapshot.val();
+      if (inMaintenance) {
+        maintenanceWarning.style.display = 'block';
+      } else {
+        maintenanceWarning.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

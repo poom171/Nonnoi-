@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Manage Resellers - Animated Blue Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0077ff;
+      --secondary: #0043a8;
+      --success: #00b4d8;
+      --danger: #ff477e;
+      --warning: #ffb703;
+      --info: #48cae4;
+      --light: #f0f8ff;
+      --dark: #03045e;
+      --gray: #6c757d;
+      --white: #ffffff;
+      --blue-bg: #f4f8ff;
+      --blue-shadow: rgba(0, 119, 255, 0.2);
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatCard {
+      0% { transform: translateY(0px); box-shadow: 0 4px 15px var(--blue-shadow); }
+      50% { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 119, 255, 0.3); }
+      100% { transform: translateY(0px); box-shadow: 0 4px 15px var(--blue-shadow); }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #f0f4ff, #e2ecff, #f8fbff, #eef4ff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: var(--dark);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+
+    /* Header */
+    .header {
+      background-color: var(--white);
+      box-shadow: 0 2px 15px var(--blue-shadow);
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--secondary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      transition: all 0.2s ease;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: var(--light);
+      color: var(--primary);
+      padding: 0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: var(--white);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+      color: var(--dark);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      font-weight: 600;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: var(--white);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 60px;
+      left: -260px;
+      bottom: 0;
+      width: 260px;
+      background-color: var(--white);
+      box-shadow: 4px 0 20px var(--blue-shadow);
+      transition: transform 0.3s ease-in-out;
+      z-index: 900;
+      overflow-y: auto;
+    }
+
+    .sidebar.active {
+      transform: translateX(260px);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 15px 0;
+    }
+
+    .sidebar-item {
+      margin-bottom: 5px;
+      padding: 0 10px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: var(--gray);
+      text-decoration: none;
+      border-radius: 8px;
+      gap: 12px;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .sidebar-link:hover, .sidebar-link.active {
+      background: rgba(0, 119, 255, 0.1);
+      color: var(--primary);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 65px;
+      margin-left: 0;
+      padding: 15px 8px;
+      transition: all 0.3s ease;
+    }
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--dark);
+    }
+
+    .page-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+    }
+
+    .search-box input {
+      padding: 10px 15px 10px 40px;
+      border: 1.5px solid #bde0fe;
+      border-radius: 8px;
+      width: 100%;
+      background-color: var(--white);
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--white), #f0f7ff);
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+      border: 1px solid #d0e1fd;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    .stat-card h3 {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 4px;
+    }
+
+    .stat-card p {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-icon {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      font-size: 2.2rem;
+      opacity: 0.15;
+      color: var(--primary);
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--blue-shadow);
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #d0e1fd;
+    }
+
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .user-card {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid #bde0fe;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .user-card.blocked {
+      border-color: var(--danger);
+      background-color: rgba(255, 71, 126, 0.03);
+    }
+
+    .user-card.inactive {
+      border-color: var(--gray);
+      background-color: rgba(108, 117, 125, 0.03);
+    }
+
+    .user-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2ecff;
+    }
+
+    .user-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    .status-badges {
+      display: flex;
+      gap: 6px;
+    }
+
+    .invite-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f0f8ff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      border: 1px solid #bde0fe;
+    }
+
+    .invite-status-bar span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .detail-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #bde0fe;
+      border-radius: 6px;
+      font-size: 13px;
+      background-color: #f8fbff;
+      outline: none;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    .user-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      border-top: 1px solid #e2ecff;
+      padding-top: 10px;
+    }
+
+    /* Custom Exact Match Delete Modal Styles */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .custom-modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .custom-modal {
+      background: var(--white);
+      width: 85%;
+      max-width: 320px;
+      border-radius: 16px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      transform: scale(0.85);
+      transition: transform 0.25s ease;
+    }
+
+    .custom-modal-overlay.show .custom-modal {
+      transform: scale(1);
+    }
+
+    .custom-modal h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .custom-modal p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 22px;
+      line-height: 1.4;
+    }
+
+    .custom-modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .custom-modal-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+
+    .custom-modal-actions button:active {
+      opacity: 0.8;
+    }
+
+    .btn-cancel-modal {
+      background-color: #f0f4ff;
+      color: var(--primary);
+      border: 1px solid #d0e1fd;
+    }
+
+    .btn-confirm-delete {
+      background-color: var(--danger);
+      color: var(--white);
+    }
+
+    /* Desktop View */
+    @media (min-width: 768px) {
+      .sidebar {
+        left: 0;
+      }
+      .sidebar.active {
+        transform: translateX(-260px);
+      }
+      .main-content {
+        margin-left: 260px;
+        padding: 25px;
+      }
+      .main-content.full-width {
+        margin-left: 0;
+      }
+      .page-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .page-actions {
+        flex-direction: row;
+        align-items: center;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .user-details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  
+/* NONNOI DARK BLUE / BLACK THEME */
+:root{
+  --primary:#168bff !important; --secondary:#0756b5 !important;
+  --success:#16c7e8 !important; --info:#38bdf8 !important;
+  --light:#101b2d !important; --dark:#e8f1ff !important;
+  --white:#0b1422 !important; --blue-bg:#080f1b !important;
+  --blue-shadow:rgba(0,132,255,.20) !important;
+}
+html,body{background:#070d17 !important;color:#e7efff !important;}
+body{background:radial-gradient(ellipse at 15% 0%,#10294a 0%,#080f1b 42%,#050910 100%) !important;}
+.header,.navbar,.topbar{background:rgba(8,17,31,.94) !important;color:#eaf3ff !important;border-bottom:1px solid #183657 !important;box-shadow:0 8px 28px rgba(0,0,0,.35) !important;backdrop-filter:blur(14px);}
+.header-title,.header h1,.header h2,h1,h2,h3,h4,label{color:#eaf3ff !important;}
+.card,.login-card,.stat-card,.dashboard-card,.custom-modal,.modal-content,.sidebar,.content-card,.panel,.table-container,.form-container{background:linear-gradient(145deg,#101d30,#0a1422) !important;color:#e5efff !important;border:1px solid #1b3858 !important;box-shadow:0 12px 34px rgba(0,0,0,.32),0 0 18px rgba(0,119,255,.06) !important;}
+input,select,textarea,.form-control{background:#081321 !important;color:#edf5ff !important;border:1px solid #244466 !important;}
+input::placeholder,textarea::placeholder{color:#8298b5 !important;}
+input:focus,select:focus,textarea:focus,.form-control:focus{border-color:#168bff !important;box-shadow:0 0 0 3px rgba(22,139,255,.16) !important;}
+button,.btn,.btn-primary,.btn-login{background:linear-gradient(135deg,#0878e8,#064ca8) !important;color:#fff !important;border:1px solid #258fff !important;box-shadow:0 5px 16px rgba(0,105,220,.22) !important;}
+.btn-success{background:linear-gradient(135deg,#087f9e,#075a80) !important;border-color:#18b8d9 !important;}
+.btn-danger,.btn-confirm-delete{background:linear-gradient(135deg,#b52b48,#781d35) !important;border-color:#d64c68 !important;}
+.btn-warning{background:linear-gradient(135deg,#9a6814,#6d470b) !important;border-color:#d69b2c !important;}
+a{color:#55b5ff !important;}
+table{color:#e5efff !important;border-color:#1d3855 !important;}
+th{background:#102743 !important;color:#8bcaff !important;}
+td{border-color:#1b3049 !important;}
+tr:nth-child(even){background:rgba(22,139,255,.045) !important;}
+tr:hover{background:rgba(22,139,255,.10) !important;}
+hr,.divider{border-color:#1b3858 !important;}
+.badge,.status,.creator-badge{border:1px solid #28517b !important;}
+.custom-modal-overlay{background:rgba(0,0,0,.72) !important;}
+.login-card .logo-icon{color:#38a5ff !important;text-shadow:0 0 24px rgba(22,139,255,.55);}
+::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-track{background:#080f1b}::-webkit-scrollbar-thumb{background:#145a99;border-radius:8px}
+
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-left">
+        <button class="btn btn-icon" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="header-title">
+          <i class="fas fa-user-shield"></i>
+          <span>Blue Panel</span>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <div class="user-avatar">
+          <img src="logo.png" alt="Admin" width="35" height="35" style="border: 2px solid var(--primary); border-radius: 50%;" onerror="this.src='https://via.placeholder.com/35'">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+      <li class="sidebar-item">
+        <a href="index.html" class="sidebar-link">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="admin.html" class="sidebar-link">
+          <i class="fas fa-user-plus"></i>
+          <span>Add User</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link">
+          <i class="fas fa-users-cog"></i>
+          <span>Manage Users</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="reseller.html" class="sidebar-link">
+          <i class="fas fa-user-shield"></i>
+          <span>Add Reseller</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="manage-resellers.html" class="sidebar-link active">
+          <i class="fas fa-users-gear"></i>
+          <span>Manage Resellers</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="settings.html" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">
+          <i class="fas fa-users-gear"></i>
+          Reseller Management
+        </h1>
+        <div class="page-actions">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search resellers by email..." oninput="filterResellers()">
+          </div>
+          <button class="btn btn-primary" onclick="window.location.href='reseller.html'">
+            <i class="fas fa-user-shield"></i> Add Reseller
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Resellers</h3>
+          <p id="totalResellers">0</p>
+          <i class="fas fa-user-shield stat-icon"></i>
+        </div>
+        <div class="stat-card">
+          <h3>Total Credits Assigned</h3>
+          <p id="totalCredits">0</p>
+          <i class="fas fa-coins stat-icon"></i>
+        </div>
+      </div>
+
+      <div class="card">
+        <div id="resellerList" class="user-list">
+          <div class="loading" style="color: var(--primary); text-align: center; padding: 15px; font-size: 14px;">
+            <i class="fas fa-spinner fa-spin"></i> Loading resellers...
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Custom Exact Match Delete Confirmation Modal -->
+  <div class="custom-modal-overlay" id="deleteModal">
+    <div class="custom-modal">
+      <h3>Confirm Delete</h3>
+      <p id="deleteModalText">Are you sure you want to delete user?</p>
+      <div class="custom-modal-actions">
+        <button class="btn-cancel-modal" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn-confirm-delete" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { ref, get, update, remove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      if(window.innerWidth >= 768) {
+        mainContent.classList.toggle('full-width');
+      }
+    });
+
+    const resellerListEl = document.getElementById('resellerList');
+    let allResellers = {};
+    let resellerKeyToDelete = null;
+
+    function loadResellers() {
+      const resellersRef = ref(db, "resellers");
+      get(resellersRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          allResellers = snapshot.val();
+          renderResellers(allResellers);
+          updateStats(allResellers);
+        } else {
+          resellerListEl.innerHTML = '<div style="text-align:center; color:var(--gray); font-size:14px;">No resellers found.</div>';
+          updateStats({});
+        }
+      }).catch((error) => {
+        resellerListEl.innerHTML = `<div style="color:var(--danger); text-align:center; font-size:14px;">Error: ${error.message}</div>`;
+      });
+    }
+
+    loadResellers();
+
+    function updateStats(resellers) {
+      const array = Object.values(resellers);
+      document.getElementById('totalResellers').innerText = array.length;
+      
+      let totalCreds = array.reduce((sum, r) => sum + Number(r.balance || 0), 0);
+      document.getElementById('totalCredits').innerText = totalCreds;
+    }
+
+    function renderResellers(resellers) {
+      if (Object.keys(resellers).length === 0) {
+        resellerListEl.innerHTML = '<div style="text-align:center; color:var(--gray); font-size:14px;">No resellers found.</div>';
+        return;
+      }
+
+      resellerListEl.innerHTML = '';
+      Object.entries(resellers).forEach(([key, reseller]) => {
+        const email = reseller.email || (key.includes('@') ? key : '');
+        if (!email) return;
+
+        const safeKey = key.replace(/[^a-zA-Z0-9]/g, '_');
+        const isBlocked = reseller.status === 'blocked' || reseller.isBlocked === true;
+        const isInactive = reseller.activeStatus === 'inactive' || reseller.isInactive === true;
+        const isInviteBlocked = reseller.inviteStatus === 'blocked' || reseller.isInviteBlocked === true;
+
+        const card = document.createElement('div');
+        card.className = `user-card ${isBlocked ? 'blocked' : ''} ${isInactive ? 'inactive' : ''}`;
+        card.innerHTML = `
+          <div class="user-header">
+            <h3><i class="fas fa-envelope" style="color: var(--primary); margin-right: 6px;"></i> ${email}</h3>
+            <div class="status-badges">
+              <span style="font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: 600; background: ${isBlocked ? 'rgba(255, 71, 126, 0.15)' : 'rgba(0, 180, 216, 0.15)'}; color: ${isBlocked ? 'var(--danger)' : 'var(--success)'};">
+                ${isBlocked ? 'BLOCKED' : 'ACTIVE_ACC'}
+              </span>
+              <span style="font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: 600; background: ${isInactive ? 'rgba(108, 117, 125, 0.15)' : 'rgba(0, 180, 216, 0.15)'}; color: ${isInactive ? 'var(--gray)' : 'var(--success)'};">
+                ${isInactive ? 'INACTIVE' : 'ACTIVE'}
+              </span>
+            </div>
+          </div>
+
+          <!-- Invite System Block Bar -->
+          <div class="invite-status-bar" style="border-color: ${isInviteBlocked ? 'var(--danger)' : '#bde0fe'}; background: ${isInviteBlocked ? 'rgba(255, 71, 126, 0.05)' : '#f0f8ff'};">
+            <span><i class="fas fa-user-plus" style="color: var(--primary); margin-right: 5px;"></i> Invite System: <strong style="color: ${isInviteBlocked ? 'var(--danger)' : 'var(--success)'};">${isInviteBlocked ? 'BLOCKED' : 'ACTIVE'}</strong></span>
+            <button class="btn ${isInviteBlocked ? 'btn-success' : 'btn-danger'}" style="font-size: 0.75rem; padding: 4px 10px;" onclick="toggleInviteBlock('${key}', ${isInviteBlocked})" type="button">
+              <i class="fas ${isInviteBlocked ? 'fa-unlock' : 'fa-lock'}"></i> ${isInviteBlocked ? 'Unblock Invite' : 'Block Invite'}
+            </button>
+          </div>
+          
+          <div class="user-details">
+            <div class="detail-group">
+              <label>Reseller Password</label>
+              <div class="password-container">
+                <input type="password" id="password-${safeKey}" value="${reseller.password || ''}" class="form-control">
+                <button class="toggle-password" onclick="togglePasswordVisibility('password-${safeKey}', this)" type="button">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="detail-group">
+              <label>Credit Package (Increase/Change)</label>
+              <select id="balance-${safeKey}" class="form-control">
+                <option value="0" selected>Select Credits (0)</option>
+                <option value="10">10 Credits</option>
+                <option value="20">20 Credits</option>
+                <option value="50">50 Credits</option>
+                <option value="100">100 Credits</option>
+                <option value="200">200 Credits</option>
+                <option value="500">500 Credits</option>
+              </select>
+            </div>
+
+            <div class="detail-group">
+              <label>Reseller Email ID</label>
+              <input type="text" value="${email}" class="form-control" disabled style="background:#e9ecef;">
+            </div>
+          </div>
+
+          <div class="user-actions">
+            <button class="btn ${isInactive ? 'btn-success' : 'btn-warning'}" style="font-size: 0.8rem; padding: 6px 12px;" onclick="toggleActiveStatus('${key}', ${isInactive})" type="button">
+              <i class="fas ${isInactive ? 'fa-check-circle' : 'fa-ban'}"></i> ${isInactive ? 'Make Active' : 'Make Inactive'}
+            </button>
+            <button class="btn btn-warning" onclick="toggleBlockReseller('${key}', ${isBlocked})" type="button">
+              <i class="fas ${isBlocked ? 'fa-unlock' : 'fa-lock'}"></i> ${isBlocked ? 'Unblock Account' : 'Block Account'}
+            </button>
+            <button class="btn btn-success" onclick="updateReseller('${key}', '${safeKey}')" type="button">
+              <i class="fas fa-save"></i> Update
+            </button>
+            <button class="btn btn-danger" onclick="openDeleteModal('${key}', '${email}')" type="button">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
+          </div>
+        `;
+        resellerListEl.appendChild(card);
+      });
+    }
+
+    window.togglePasswordVisibility = function(fieldId, btn) {
+      const input = document.getElementById(fieldId);
+      if (input.type === "password") {
+        input.type = "text";
+        btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+      } else {
+        input.type = "password";
+        btn.innerHTML = '<i class="fas fa-eye"></i>';
+      }
+    }
+
+    window.updateReseller = function(key, safeKey) {
+      const password = document.getElementById(`password-${safeKey}`).value.trim();
+      const selectedCredit = Number(document.getElementById(`balance-${safeKey}`).value);
+
+      if (!password) {
+        alert('Password cannot be empty!');
+        return;
+      }
+
+      const resellerRef = ref(db, `resellers/${key}`);
+      get(resellerRef).then((snapshot) => {
+        let currentBalance = 0;
+        if (snapshot.exists() && snapshot.val().balance) {
+          currentBalance = Number(snapshot.val().balance);
+        }
+
+        // নতুন ক্রেডিট যোগ করে আপডেট করা হচ্ছে
+        const newTotalBalance = currentBalance + selectedCredit;
+
+        update(resellerRef, {
+          password: password,
+          balance: newTotalBalance
+        }).then(() => {
+          alert('Reseller updated & credits added successfully!');
+          loadResellers(); // পেজ রিলোড বা রিফ্রেশ হলে ড্রপডাউন আবার ডিফল্ট (0) হয়ে যাবে
+        }).catch((error) => {
+          alert('Error updating reseller: ' + error.message);
+        });
+      });
+    }
+
+    window.toggleBlockReseller = function(key, currentStatus) {
+      const newStatus = currentStatus ? 'active' : 'blocked';
+      const resellerRef = ref(db, `resellers/${key}`);
+      update(resellerRef, {
+        status: newStatus,
+        isBlocked: !currentStatus
+      }).then(() => {
+        loadResellers();
+      }).catch((error) => {
+        alert('Error updating status: ' + error.message);
+      });
+    };
+
+    window.toggleActiveStatus = function(key, currentInactiveStatus) {
+      const newActiveStatus = currentInactiveStatus ? 'active' : 'inactive';
+      const resellerRef = ref(db, `resellers/${key}`);
+      update(resellerRef, {
+        activeStatus: newActiveStatus,
+        isInactive: !currentInactiveStatus
+      }).then(() => {
+        loadResellers();
+      }).catch((error) => {
+        alert('Error updating active status: ' + error.message);
+      });
+    };
+
+    window.toggleInviteBlock = function(key, currentStatus) {
+      const newInviteStatus = currentStatus ? 'active' : 'blocked';
+      const resellerRef = ref(db, `resellers/${key}`);
+      update(resellerRef, {
+        inviteStatus: newInviteStatus,
+        isInviteBlocked: !currentStatus
+      }).then(() => {
+        loadResellers();
+      }).catch((error) => {
+        alert('Error updating invite status: ' + error.message);
+      });
+    };
+
+    // Exact Match Delete Modal Functions
+    window.openDeleteModal = function(key, email) {
+      resellerKeyToDelete = key;
+      document.getElementById('deleteModalText').innerText = `Are you sure you want to delete user "${email}"?`;
+      document.getElementById('deleteModal').classList.add('show');
+    };
+
+    window.closeDeleteModal = function() {
+      resellerKeyToDelete = null;
+      document.getElementById('deleteModal').classList.remove('show');
+    };
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+      if (!resellerKeyToDelete) return;
+      const resellerRef = ref(db, `resellers/${resellerKeyToDelete}`);
+      remove(resellerRef).then(() => {
+        closeDeleteModal();
+        loadResellers();
+      }).catch((error) => {
+        alert('Error deleting reseller: ' + error.message);
+        closeDeleteModal();
+      });
+    });
+
+    window.filterResellers = function() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = {};
+      Object.entries(allResellers).forEach(([key, reseller]) => {
+        const email = (reseller.email || key).toLowerCase();
+        if (email.includes(query)) {
+          filtered[key] = reseller;
+        }
+      });
+      renderResellers(filtered);
+    };
+  </script>
+</body>
+</html>
